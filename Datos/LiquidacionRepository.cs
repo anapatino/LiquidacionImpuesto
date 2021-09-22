@@ -43,6 +43,33 @@ namespace Datos
            lector.Close();
            return personas;
         }
-        
+
+        public void Eliminar(long identificacion)
+        {
+            List<LiquidacionImpuesto> persona = Consultar();
+            File.Delete(ruta);
+            foreach (var item in persona)
+            {
+                if (!item.Identificacion.Equals(identificacion))
+                {
+                    Guardar(item);
+                }
+            }
+
+        }
+        public LiquidacionImpuesto Buscar(long identificacion)
+        {
+            List<LiquidacionImpuesto> persona = Consultar();
+            foreach (var item in persona)
+            {
+                if (item.Identificacion.Equals(identificacion))
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+
     }
 }

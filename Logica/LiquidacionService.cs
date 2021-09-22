@@ -35,5 +35,22 @@ namespace Logica
                 return new LiquidacionConsultaResponse($"Error inesperado al Consultar: {e.Message}");
             }
         }
+        public string Eliminar(long identificacion)
+        {
+            try
+            {
+                if (liquidacionRepository.Buscar(identificacion) != null)
+                {
+                    liquidacionRepository.Eliminar(identificacion);
+                    return $"Se Eliminó el registro de la persona con Nro.Liquidacion ({identificacion})";
+                }
+                return $"No fue posible eliminar el registro, porque no existe la persona con Nro.Liquidacion ({identificacion})";
+            }
+            catch (Exception e)
+            {
+                return $"Error inesperado al Eliminar: {e.Message}";
+            }
+
+        }
     }
 }

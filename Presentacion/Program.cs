@@ -20,7 +20,11 @@ namespace Presentacion
                     case 2:
                         ConsultarRegistros();
                         break;
-                    case 3: seguir = 'N';
+                    case 3:
+                        Eliminar()
+                        break;
+                    case 4:
+                        seguir = 'N';
                         break;
 
                 }
@@ -36,7 +40,8 @@ namespace Presentacion
             Console.WriteLine("-----Liquidaciones de Impuestos---");
             Console.WriteLine("1.Registrar Establecimiento");
             Console.WriteLine("2.Consultar");
-            Console.WriteLine("3.Salir");
+            Console.WriteLine("3.Eliminar");
+            Console.WriteLine("4.Salir");
             Console.WriteLine();
             Console.Write(  "Seleccione su opcion->");
             do
@@ -109,6 +114,17 @@ namespace Presentacion
                 Console.Write("Pulse una tecla para salir "); Console.ReadKey();
             }
 
+        }
+
+        public static void Eliminar()
+        {
+            Console.Clear();
+            Console.WriteLine("------Eliminar por Identificacion --------");
+            Console.WriteLine();
+            Console.Write(" Nro Liquidacion :"); long numeroIdentificacion = long.Parse(Console.ReadLine());
+            string mensajeEliminacion = liquidacionService.Eliminar(numeroIdentificacion);
+            Console.WriteLine($"    { mensajeEliminacion} ");
+            Console.Write("   Pulse una tecla para salir "); Console.ReadKey();
         }
 
     }

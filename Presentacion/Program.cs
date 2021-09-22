@@ -16,10 +16,11 @@ namespace Presentacion
                 switch (opcion)
                 {
                     case 1:Guardar();
-          
                         break;
                     case 2:
-                        seguir = 'N';
+                        ConsultarRegistros();
+                        break;
+                    case 3: seguir = 'N';
                         break;
 
                 }
@@ -34,13 +35,14 @@ namespace Presentacion
             Console.Clear();
             Console.WriteLine("-----Liquidaciones de Impuestos---");
             Console.WriteLine("1.Registrar Establecimiento");
-            Console.WriteLine("2.Salir");
+            Console.WriteLine("2.Consultar");
+            Console.WriteLine("3.Salir");
             Console.WriteLine();
             Console.Write(  "Seleccione su opcion->");
             do
             {
                 opcion=int.Parse(Console.ReadLine());
-            } while (opcion < 1 && opcion > 2);
+            } while (opcion < 1 && opcion > 3);
 
             return opcion;
         }
@@ -75,21 +77,39 @@ namespace Presentacion
 
         }
 
-        public static void Consultar(LiquidacionImpuesto persona)
+        public static void ConsultarRegistros()
         {
             Console.Clear();
-            Console.WriteLine($"Identificacion del Establecimiento ({persona.Identificacion})");
-            Console.WriteLine($"Nombre del Establecimiento         ({persona.NombreEstablecimiento})"); 
-            Console.WriteLine($"Valor Ingreso Anual                 ({persona.ValorIngresoAnual})");
-            Console.WriteLine($"Valor Gasto   Anual                ({persona.ValorGastoAnual})"); 
-            Console.WriteLine($"Tiempo de Funcionamiento           ({persona.TiempoFuncionamiento})"); 
-            Console.WriteLine($"Tipo de Responsabilidad            ({persona.TipoResponsabilidad})");
-            Console.WriteLine("             -------------------------------");
-            Console.WriteLine($"Ganancia-> ({persona.Ganancia})");
-            Console.WriteLine($"Valor UTV-> ({persona.ValorUVT})");
-            Console.WriteLine($"Tarifa Aplicada-> ({persona.Tarifa})");
-            Console.WriteLine($"Valor Liquidado-> ({persona.ValorLiquidacion})");
-            Console.ReadKey();
+            Console.WriteLine("------Consulta de Datos--------");
+            Console.WriteLine();
+            var respuesta = liquidacionService.Consultar();
+            if (respuesta.Error)
+            {
+                Console.WriteLine($"     { respuesta.Mensaje}");
+            }
+            else
+            {
+                foreach (var item in respuesta.Persona)
+                {
+
+                    Console.WriteLine($"Identificacion del Establecimiento ({item.Identificacion})");
+                    Console.WriteLine($"Nombre del Establecimiento         ({item.NombreEstablecimiento})");
+                    Console.WriteLine($"Valor Ingreso Anual                 ({item.ValorIngresoAnual})");
+                    Console.WriteLine($"Valor Gasto   Anual                ({item.ValorGastoAnual})");
+                    Console.WriteLine($"Tiempo de Funcionamiento           ({item.TiempoFuncionamiento})");
+                    Console.WriteLine($"Tipo de Responsabilidad            ({item.TipoResponsabilidad})");
+                    Console.WriteLine("         ");
+                    Console.WriteLine($"Ganancia-> ({item.Ganancia})");
+                    Console.WriteLine($"Valor UTV-> ({item.ValorUVT})");
+                    Console.WriteLine($"Tarifa Aplicada-> ({item.Tarifa})");
+                    Console.WriteLine($"Valor Liquidado-> ({item.ValorLiquidacion})");
+                   
+                    Console.WriteLine("------------------------------------------------");
+                }
+                Console.Write("Pulse una tecla para salir "); Console.ReadKey();
+            }
+
         }
+
     }
 }

@@ -23,5 +23,17 @@ namespace Logica
                 return $"Error inesperado al Guardar: {e.Message}";
             }
         }
+        public LiquidacionConsultaResponse Consultar()
+        {
+            try
+            {
+                return new LiquidacionConsultaResponse(liquidacionRepository.Consultar());
+            }
+            catch (Exception e)
+            {
+
+                return new LiquidacionConsultaResponse($"Error inesperado al Consultar: {e.Message}");
+            }
+        }
     }
 }

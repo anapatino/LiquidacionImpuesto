@@ -6,6 +6,7 @@ namespace Presentacion
 {
     class Program
     {
+        private static readonly LiquidacionService liquidacionService = new LiquidacionService();
         static void Main(string[] args)
         {
             char seguir = 'S';
@@ -14,8 +15,8 @@ namespace Presentacion
                 int opcion = Menu();
                 switch (opcion)
                 {
-                    case 1:
-                        RegistrarDatos();
+                    case 1:Guardar();
+          
                         break;
                     case 2:
                         seguir = 'N';
@@ -43,8 +44,17 @@ namespace Presentacion
 
             return opcion;
         }
+        private static void Guardar()
+        {
+            Console.Clear();
+            Console.WriteLine("---Registro de Usuario---");
+            var persona = RegistrarDatos();
+            string mensaje= liquidacionService.Guarda(persona);
+            Console.WriteLine($"     { mensaje}");
+            Console.Write("          Pulse una tecla para salir "); Console.ReadKey();
+        }
 
-        public static void RegistrarDatos()
+        public static LiquidacionImpuesto RegistrarDatos()
         {
             long identificacion;
             string nombreEstablecimiento,tipoResponsabilidad;
@@ -61,7 +71,7 @@ namespace Presentacion
 
             persona = new(identificacion, nombreEstablecimiento,  valorIngresoAnual, valorGastosAnual, tipoResponsabilidad,tiempoFuncionamiento);
             persona.CalcularLiquidacion();
-            Consultar(persona);
+            return persona;
 
         }
 

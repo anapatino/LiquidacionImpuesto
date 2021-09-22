@@ -20,9 +20,8 @@ namespace Presentacion
                     case 2:
                         ConsultarRegistros();
                         break;
-                    case 3:
-                        Eliminar()
-                        break;
+                    case 3:Eliminar();
+                           break;
                     case 4:
                         seguir = 'N';
                         break;
@@ -85,7 +84,7 @@ namespace Presentacion
         public static void ConsultarRegistros()
         {
             Console.Clear();
-            Console.WriteLine("------Consulta de Datos--------");
+            Console.WriteLine("---------------------------");
             Console.WriteLine();
             var respuesta = liquidacionService.Consultar();
             if (respuesta.Error)
@@ -109,7 +108,7 @@ namespace Presentacion
                     Console.WriteLine($"Tarifa Aplicada-> ({item.Tarifa})");
                     Console.WriteLine($"Valor Liquidado-> ({item.ValorLiquidacion})");
                    
-                    Console.WriteLine("------------------------------------------------");
+                    Console.WriteLine("_____________________________________");
                 }
                 Console.Write("Pulse una tecla para salir "); Console.ReadKey();
             }
@@ -121,9 +120,14 @@ namespace Presentacion
             Console.Clear();
             Console.WriteLine("------Eliminar por Identificacion --------");
             Console.WriteLine();
+            Console.WriteLine("LISTADO ANTES");
+            ConsultarRegistros();
             Console.Write(" Nro Liquidacion :"); long numeroIdentificacion = long.Parse(Console.ReadLine());
             string mensajeEliminacion = liquidacionService.Eliminar(numeroIdentificacion);
             Console.WriteLine($"    { mensajeEliminacion} ");
+            Console.WriteLine();
+            Console.WriteLine("LISTADO DESPUES");
+            ConsultarRegistros();
             Console.Write("   Pulse una tecla para salir "); Console.ReadKey();
         }
 

@@ -2,19 +2,20 @@
 
 namespace Entidad
 {
-    public class LiquidacionImpuesto
+    public abstract class LiquidacionImpuesto
     {
         private long identificacion;
-        private double valorIngresoAnuales, valorGastosAnuales, UVT = 30.000,ganancia,tarifa,valorUVT,valorLiquidacion;
+        private double valorUVT,utv=30.000;
         private int tiempoFuncionamiento;
         private string tipoResponsabilidad,nombreEstableciemnto;
+        private decimal valorLiquidacion,ganancia,valorIngresoAnuales, valorGastosAnuales,tarifa=0;
 
         public LiquidacionImpuesto()
         {
 
         }
 
-        public LiquidacionImpuesto(long identificacion,string nombreEstablecimiento,double valorIngresoAnuales,double valorGastosAnuales ,string tipoResponsabilidad,int tiempoFuncionamiento)
+        public LiquidacionImpuesto(long identificacion,string nombreEstablecimiento,decimal valorIngresoAnuales,decimal valorGastosAnuales ,string tipoResponsabilidad,int tiempoFuncionamiento)
         {
             Identificacion=identificacion;
             NombreEstablecimiento=nombreEstablecimiento;
@@ -22,94 +23,38 @@ namespace Entidad
             ValorGastoAnual=valorGastosAnuales;
             TipoResponsabilidad=tipoResponsabilidad;
             TiempoFuncionamiento = tiempoFuncionamiento;
-            Ganancia = ganancia;
-            Tarifa = tarifa;
-            ValorUVT = valorUVT;
-            ValorLiquidacion = valorLiquidacion;
         }
         public long Identificacion { get; set; }
         public string NombreEstablecimiento { get; set; }
-        public double ValorIngresoAnual { get; set; }
-        public double ValorGastoAnual { get; set; }
+        public decimal ValorIngresoAnual { get; set; }
+        public decimal ValorGastoAnual { get; set; }
         public string TipoResponsabilidad { get; set; }
         public int TiempoFuncionamiento { get; set; }
-        public double Ganancia { get; set; }
-        public double Tarifa { get; set; }
+        public decimal Ganancia { get; set; }
+        public decimal Tarifa { get; set; }
         public double ValorUVT { get; set; }
-        public double ValorLiquidacion { get; set; }
+        public decimal ValorLiquidacion { get; set; }
 
         public void CalcularLiquidacion()
         {
-            CalcularGanancia();
-            CalcularTarifa();
+           Ganancia=CalcularGanancia();
+           Tarifa=CalcularTarifa();
             CalcularValorUVT();
-            ValorLiquidacion = Ganancia * (Tarifa / 100);
+           ValorLiquidacion = Ganancia * (Tarifa/100);
         }
 
-        public void CalcularGanancia()
+        public decimal CalcularGanancia()
         {
-            Ganancia = ValorIngresoAnual - ValorGastoAnual;
+          decimal ganancia = ValorIngresoAnual - ValorGastoAnual;
+            return ganancia;
         }
         public void CalcularValorUVT()
         {
-            ValorUVT=Ganancia / UVT;
+           double valor = (double)Ganancia / utv;
+           ValorUVT =  Math.Round(valor, 2);
         }
 
-        public void CalcularTarifa()
-        {
-            if (TipoResponsabilidad.ToUpper().Equals("IVA"))
-            {
-                CalcularResponsableTarifa();
-            }
-            else 
-            {
-                CalcularNoResponsableTarifa();
-            }
-        }
-
-        public void CalcularResponsableTarifa()
-        {
-            if (Ganancia < 0)
-            {
-                Tarifa = 0;
-            }
-            else if (Ganancia < (UVT*100))
-            {
-                Tarifa = 5;
-            }
-            else if ((Ganancia >= (UVT * 100))&& (Ganancia <= (UVT * 200)))
-            {
-                Tarifa = 10;
-            }
-            else if (Ganancia <= (UVT * 500))
-            {
-                Tarifa = 15;
-            }
-
-        }
-        public void CalcularNoResponsableTarifa()
-        {
-            if (Ganancia > (UVT * 100))
-            {
-                if (TiempoFuncionamiento < 5)
-                {
-                    Tarifa = 1;
-                }
-                else if ((TiempoFuncionamiento >= 5)&& (TiempoFuncionamiento <10))
-                {
-                    Tarifa = 2;
-                }
-                else if (TiempoFuncionamiento >= 10)
-                {
-                    Tarifa = 3;
-                }
-            }
-            else
-            {
-                Tarifa = 0;
-            }
-           
-
-        }
+        public abstract decimal CalcularTarifa();
+    
     }
 }

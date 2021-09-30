@@ -23,21 +23,57 @@ namespace Datos
             while ((linea = lector.ReadLine()) != null)
             {
                 string[] dato = linea.Split(';');
-
-                LiquidacionImpuesto persona = new LiquidacionImpuesto()
+                if(dato[4].Equals("CON IVA"))
+                {
+                    LiquidacionImpuesto responsable = new ResponsableIVA()
                     {
                         Identificacion = long.Parse(dato[0]),
                         NombreEstablecimiento = dato[1],
-                        ValorIngresoAnual =double.Parse(dato[2]),
-                        ValorGastoAnual = double.Parse(dato[3]),
+                        ValorIngresoAnual = decimal.Parse(dato[2]),
+                        ValorGastoAnual = decimal.Parse(dato[3]),
                         TipoResponsabilidad = dato[4],
                         TiempoFuncionamiento = int.Parse(dato[5]),
-                        Ganancia = double.Parse(dato[6]),
-                        Tarifa = double.Parse(dato[7]),
+                        Ganancia = decimal.Parse(dato[6]),
+                        Tarifa = decimal.Parse(dato[7]),
                         ValorUVT = double.Parse(dato[8]),
-                        ValorLiquidacion = double.Parse(dato[9])
+                        ValorLiquidacion = decimal.Parse(dato[9])
                     };
-                personas.Add(persona);
+                    personas.Add(responsable);
+                }
+                else if (dato[4].Equals("CON IVA"))
+                {
+                    LiquidacionImpuesto noResponsable = new NoResponsableIVA()
+                    {
+                        Identificacion = long.Parse(dato[0]),
+                        NombreEstablecimiento = dato[1],
+                        ValorIngresoAnual = decimal.Parse(dato[2]),
+                        ValorGastoAnual = decimal.Parse(dato[3]),
+                        TipoResponsabilidad = dato[4],
+                        TiempoFuncionamiento = int.Parse(dato[5]),
+                        Ganancia = decimal.Parse(dato[6]),
+                        Tarifa = decimal.Parse(dato[7]),
+                        ValorUVT = double.Parse(dato[8]),
+                        ValorLiquidacion = decimal.Parse(dato[9])
+                    };
+                    personas.Add(noResponsable);
+                }
+                else if (dato[4].Equals("RST"))
+                {
+                    LiquidacionImpuesto regimen = new RegimenSimpleTributacion()
+                    {
+                        Identificacion = long.Parse(dato[0]),
+                        NombreEstablecimiento = dato[1],
+                        ValorIngresoAnual = decimal.Parse(dato[2]),
+                        ValorGastoAnual = decimal.Parse(dato[3]),
+                        TipoResponsabilidad = dato[4],
+                        TiempoFuncionamiento = int.Parse(dato[5]),
+                        Ganancia = decimal.Parse(dato[6]),
+                        Tarifa = decimal.Parse(dato[7]),
+                        ValorUVT = double.Parse(dato[8]),
+                        ValorLiquidacion = decimal.Parse(dato[9])
+                    };
+                    personas.Add(regimen);
+                }
 
             }
            lector.Close();
@@ -59,14 +95,19 @@ namespace Datos
         }
         public LiquidacionImpuesto Buscar(long identificacion)
         {
-            List<LiquidacionImpuesto> persona = Consultar();
-            foreach (var item in persona)
+            bool resultado = File.Exists(ruta);
+            if (resultado == true)
             {
-                if (item.Identificacion.Equals(identificacion))
+                List<LiquidacionImpuesto> persona = Consultar();
+                foreach (var item in persona)
                 {
-                    return item;
+                    if (item.Identificacion.Equals(identificacion))
+                    {
+                        return item;
+                    }
                 }
             }
+            
             return null;
         }
 

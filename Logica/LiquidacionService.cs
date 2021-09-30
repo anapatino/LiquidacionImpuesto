@@ -52,5 +52,21 @@ namespace Logica
             }
 
         }
+        public string Busca(long identificacion)
+        {
+            try
+            {
+                if (liquidacionRepository.Buscar(identificacion) != null)
+                {
+                    return $"Ya se encuentra un registro con Nro.Identificacion ({identificacion})";
+                }
+                return "Identificacion Generada correctamente";
+            }
+            catch (Exception e)
+            {
+
+                return $"Error inesperado al Buscar: {e.Message}";
+            }
+        }
     }
 }

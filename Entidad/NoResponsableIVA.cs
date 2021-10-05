@@ -8,7 +8,7 @@ namespace Entidad
 {
     public class NoResponsableIVA:LiquidacionImpuesto
     {
-        private int utv = 30000;
+        private const int utv = 30000;
         public NoResponsableIVA()
         {
 
@@ -19,29 +19,23 @@ namespace Entidad
 
         }
 
-        public override decimal CalcularTarifa()
+        public override double CalcularTarifa()
         {
-            decimal tarifa;
+            double tarifa;
             if (Ganancia > (utv * 100))
             {
                 if (TiempoFuncionamiento <= 5)
                 {
-                    tarifa = 8;
+                    tarifa = 0.1;
                 }
                 else if ((TiempoFuncionamiento > 5) && (TiempoFuncionamiento < 10))
                 {
-                    tarifa = 2;
+                    tarifa = 0.2;
                 }
-                else if (TiempoFuncionamiento >= 10)
+                else 
                 {
-                    tarifa = 3;
+                    tarifa = 0.3;
                 }
-                else
-                {
-                    tarifa = 0;
-                }
-
-
             }
             else
             {
@@ -49,7 +43,6 @@ namespace Entidad
             }
            
             return tarifa;
-
         }
     }
 }

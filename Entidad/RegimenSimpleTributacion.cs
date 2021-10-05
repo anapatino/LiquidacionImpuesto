@@ -20,12 +20,12 @@ namespace Entidad
 
         }
 
-        public override decimal CalcularTarifa()
+        public override double CalcularTarifa()
         {
-            int tarifa;
+          double tarifa;
             if (Ganancia> (utv*50))
             {
-                tarifa = 5;
+                tarifa = 0.5;
             }
             else
             {

@@ -4,11 +4,7 @@ namespace Entidad
 {
     public abstract class LiquidacionImpuesto
     {
-        private long identificacion;
-        private double valorUVT,utv=30.000;
-        private int tiempoFuncionamiento;
-        private string tipoResponsabilidad,nombreEstableciemnto;
-        private decimal valorLiquidacion,ganancia,valorIngresoAnuales, valorGastosAnuales,tarifa=0;
+        private double utv=30.000;
 
         public LiquidacionImpuesto()
         {
@@ -31,7 +27,7 @@ namespace Entidad
         public string TipoResponsabilidad { get; set; }
         public int TiempoFuncionamiento { get; set; }
         public decimal Ganancia { get; set; }
-        public decimal Tarifa { get; set; }
+        public double Tarifa { get; set; }
         public double ValorUVT { get; set; }
         public decimal ValorLiquidacion { get; set; }
 
@@ -39,14 +35,14 @@ namespace Entidad
         {
            Ganancia=CalcularGanancia();
            Tarifa=CalcularTarifa();
-            CalcularValorUVT();
-           ValorLiquidacion = Ganancia * (Tarifa/100);
+           CalcularValorUVT();
+           ValorLiquidacion = Ganancia * (decimal)Tarifa;
         }
 
         public decimal CalcularGanancia()
         {
-          decimal ganancia = ValorIngresoAnual - ValorGastoAnual;
-            return ganancia;
+           decimal ganancia = ValorIngresoAnual - ValorGastoAnual;
+           return ganancia;
         }
         public void CalcularValorUVT()
         {
@@ -54,7 +50,11 @@ namespace Entidad
            ValorUVT =  Math.Round(valor, 2);
         }
 
-        public abstract decimal CalcularTarifa();
-    
+        public abstract double CalcularTarifa();
+        public override string ToString()
+        {
+            return $"{Identificacion};{NombreEstablecimiento};{ValorIngresoAnual};{ValorGastoAnual};{TipoResponsabilidad};{TiempoFuncionamiento};{Ganancia};{Tarifa};{ValorUVT };{ValorLiquidacion}";
+        }
+
     }
 }

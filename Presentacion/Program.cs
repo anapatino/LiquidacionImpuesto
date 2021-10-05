@@ -17,15 +17,12 @@ namespace Presentacion
                 {
                     case 1: Guardar();
                         break;
-                    case 2:
-                        ConsultarRegistros();
+                    case 2:ConsultarRegistros();
                         break;
                     case 3: Eliminar();
                         break;
-                    case 4:
-                        seguir = 'N';
+                    case 4:seguir = 'N';
                         break;
-
                 }
             } while (seguir == 'S');
 
@@ -45,7 +42,7 @@ namespace Presentacion
             Console.Write("Seleccione su opcion->");
             do
             {
-                opcion = int.Parse(Console.ReadLine());
+              opcion = int.Parse(Console.ReadLine());
             } while (opcion < 1 && opcion > 3);
 
             return opcion;
@@ -62,47 +59,45 @@ namespace Presentacion
 
         public static LiquidacionImpuesto RegistrarDatos()
         {
-            long identificacion;
-            string nombreEstablecimiento, tipoResponsabilidad;
-            decimal valorIngresoAnual, valorGastosAnual;
-            int tiempoFuncionamiento;
             Console.Clear();
-            identificacion = ValidarIdentificacion();
-            Console.Write("Nombre del Establecimiento         :"); nombreEstablecimiento = Console.ReadLine();
-            Console.Write("Valor Ingreso Anual                :"); valorIngresoAnual = decimal.Parse(Console.ReadLine());
-            Console.Write("Valor Gasto   Anual                :"); valorGastosAnual = decimal.Parse(Console.ReadLine());
-            Console.Write("Tiempo de Funcionamiento           :"); tiempoFuncionamiento = int.Parse(Console.ReadLine());
-            tipoResponsabilidad = ValidarResponsabilidad();
-
+            long identificacion = ValidarIdentificacion();
+            Console.Write("Nombre del Establecimiento         :"); 
+            string nombreEstablecimiento = Console.ReadLine();
+            Console.Write("Valor Ingreso Anual                :");
+            decimal valorIngresoAnual = decimal.Parse(Console.ReadLine());
+            Console.Write("Valor Gasto   Anual                :"); 
+            decimal valorGastosAnual = decimal.Parse(Console.ReadLine());
+            Console.Write("Tiempo de Funcionamiento           :");
+            int tiempoFuncionamiento = int.Parse(Console.ReadLine());
+            string tipoResponsabilidad = ValidarResponsabilidad();
+            var liquidacion= CrearLiquidacion(tipoResponsabilidad);
+            liquidacion.Identificacion = identificacion;
+            liquidacion.NombreEstablecimiento = nombreEstablecimiento;
+            liquidacion.ValorIngresoAnual = valorIngresoAnual;
+            liquidacion.ValorGastoAnual = valorGastosAnual;
+            liquidacion.TipoResponsabilidad = tipoResponsabilidad;
+            liquidacion.TiempoFuncionamiento = tiempoFuncionamiento;
+            liquidacion.CalcularLiquidacion();
+            return liquidacion;
+        }
+        public static LiquidacionImpuesto CrearLiquidacion(string tipoResponsabilidad)
+        {
+            LiquidacionImpuesto liquidacion;
             if (tipoResponsabilidad.Equals("CON IVA"))
             {
-
-                LiquidacionImpuesto responsable = new ResponsableIVA(identificacion, nombreEstablecimiento, valorIngresoAnual, valorGastosAnual, tipoResponsabilidad, tiempoFuncionamiento);
-                responsable.CalcularLiquidacion();
-                Console.WriteLine(responsable.Tarifa);
-                Console.WriteLine(responsable.Ganancia);
-                Console.WriteLine(responsable.ValorLiquidacion);
-                return responsable;
+                liquidacion = new ResponsableIVA();
             }
             else if (tipoResponsabilidad.Equals("SIN IVA"))
             {
-                LiquidacionImpuesto noResponsable = new ResponsableIVA(identificacion, nombreEstablecimiento, valorIngresoAnual, valorGastosAnual, tipoResponsabilidad, tiempoFuncionamiento);
-                noResponsable.CalcularLiquidacion();
-                Console.WriteLine(noResponsable.Tarifa);
-                Console.WriteLine(noResponsable.Ganancia);
-                Console.WriteLine(noResponsable.ValorLiquidacion);
-                return noResponsable;
+                liquidacion = new NoResponsableIVA();
             }
-            else 
+            else
             {
-                LiquidacionImpuesto regimen = new RegimenSimpleTributacion(identificacion, nombreEstablecimiento, valorIngresoAnual, valorGastosAnual, tipoResponsabilidad, tiempoFuncionamiento);
-                regimen.CalcularLiquidacion();
-                Console.WriteLine(regimen.Tarifa);
-                Console.WriteLine(regimen.Ganancia);
-                Console.WriteLine(regimen.ValorLiquidacion);
-                return regimen;
+                liquidacion = new RegimenSimpleTributacion();
             }
+            return liquidacion;
         }
+       
         public static long ValidarIdentificacion()
         {
             long identificacion;
@@ -138,13 +133,12 @@ namespace Presentacion
             {
                 tipoResponsabilidad = "RST";
             }
-
             return tipoResponsabilidad;
         }
         public static void ConsultarRegistros()
         {
             Console.Clear();
-            Console.WriteLine("---------------------------");
+            Console.WriteLine("---------CONSULTA REGISTROS----------------");
             Console.WriteLine();
             var respuesta = liquidacionService.Consultar();
             if (respuesta.Error)
@@ -155,24 +149,10 @@ namespace Presentacion
             {
                 foreach (var item in respuesta.Persona)
                 {
-
-                    Console.WriteLine($"Identificacion del Establecimiento ({item.Identificacion})");
-                    Console.WriteLine($"Nombre del Establecimiento         ({item.NombreEstablecimiento})");
-                    Console.WriteLine($"Valor Ingreso Anual                 ({item.ValorIngresoAnual})");
-                    Console.WriteLine($"Valor Gasto   Anual                ({item.ValorGastoAnual})");
-                    Console.WriteLine($"Tiempo de Funcionamiento           ({item.TiempoFuncionamiento})");
-                    Console.WriteLine($"Tipo de Responsabilidad            ({item.TipoResponsabilidad})");
-                    Console.WriteLine("         ");
-                    Console.WriteLine($"Ganancia-> ({item.Ganancia})");
-                    Console.WriteLine($"Valor UTV-> ({item.ValorUVT})");
-                    Console.WriteLine($"Tarifa Aplicada-> ({item.Tarifa})");
-                    Console.WriteLine($"Valor Liquidado-> ({item.ValorLiquidacion})");
-                   
-                    Console.WriteLine("_____________________________________");
+                    Console.WriteLine(item.ToString());
                 }
                 Console.Write("Pulse una tecla para salir "); Console.ReadKey();
             }
-
         }
  
         public static void Eliminar()

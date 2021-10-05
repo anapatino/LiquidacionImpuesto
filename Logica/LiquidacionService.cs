@@ -64,7 +64,6 @@ namespace Logica
             }
             catch (Exception e)
             {
-
                 return $"Error inesperado al Buscar: {e.Message}";
             }
         }
